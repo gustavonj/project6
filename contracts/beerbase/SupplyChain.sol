@@ -194,7 +194,7 @@ contract SupplyChain is ConsumerRole, StoreRole, DistributorRole, BrewerieRole, 
   }
 
   // Define a function 'brewsItem' that allows a brewerie to mark an item 'Brewed'
-  function brewsItem(uint _upc, address _originBrewerieID, string _originBrewerieName, string _originBrewerieInformation, string  _originBrewerieLatitude, string  _originBrewerieLongitude, string  _productNotes, string _productStyle, uint _alcoholTax) public 
+  function brewsItem(uint _upc, address _originBrewerieID, string _originBrewerieName, string _originBrewerieInformation, string  _originBrewerieLatitude, string  _originBrewerieLongitude, string  _productNotes, string _productStyle, uint _alcoholTax) onlyBrewerie() public 
   {
     // Add the new item as part of Brew
     items[_upc] = Item({
@@ -254,7 +254,7 @@ contract SupplyChain is ConsumerRole, StoreRole, DistributorRole, BrewerieRole, 
   }
 
   // Define a function 'buyPackageItem' that allows a distributor to mark an item 'Ordered'
-  function buyPackageItem(uint _upc) public payable
+  function buyPackageItem(uint _upc) onlyDistributor() public payable
   // Call modifier to check if upc has passed previous supply chain stage
   packaged(_upc)  
   // Call modifer to check if buyer has paid enough
@@ -289,7 +289,7 @@ contract SupplyChain is ConsumerRole, StoreRole, DistributorRole, BrewerieRole, 
     
   }
 
-  function orderItem(uint _upc) public payable
+  function orderItem(uint _upc) onlyStore() public payable
     // Call modifier to check if upc has passed previous supply chain stage
     enabledForOrder(_upc)  
     // Call modifer to check if buyer has paid enough
@@ -358,7 +358,7 @@ contract SupplyChain is ConsumerRole, StoreRole, DistributorRole, BrewerieRole, 
 
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Sold'
   // Use the above modifiers to check if the item is received
-  function buyItem(uint _upc) public payable
+  function buyItem(uint _upc) onlyConsumer() public payable
     // Call modifier to check if upc has passed previous supply chain stage
     forSale(_upc)  
     // Call modifer to check if buyer has paid enough
